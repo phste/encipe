@@ -10,30 +10,36 @@ from filter_and_replace_words import convertToModelInput
 import numpy
 import pickle
 from keras.models import model_from_json
+class Predictor:
+    top_x = 0
+    max_length_ingredient =0 
 
-def predict(inputSet):
-    max_length_ingredient = 8;
-    top_x = {}
-    with open('topx.pkl', 'rb') as f:
-        top_x = pickle.load(f)
-    with open('allvarieties.pkl', 'rb') as f:
-        allVarieties = pickle.load(f)
+    allVarieties = 0
+    loaded_model = 0
+    def __init__(self):
+        self.max_length_ingredient = 8;
+        self.top_x = {}
+        with open('topx.pkl', 'rb') as f:
+            self.top_x = pickle.load(f)
+        with open('allvarieties.pkl', 'rb') as f:
+            self.allVarieties = pickle.load(f)
 
-    json_file = open('model.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = model_from_json(loaded_model_json)
-    # load weights into new model
-    loaded_model.load_weights("model.h5")
-    #print("Loaded model from disk")
-    ingredients = []
-    for ingredient in inputSet:
-        testSet, word_list = convertToModelInput([ingredient],top_x)
-        result = loaded_model.predict(sequence.pad_sequences(testSet, maxlen=max_length_ingredient))
-        result = result.tolist()
-        if max(result[0]) < 0.01:
-            result = "undefined"
-        else:
-            result = allVarieties[result[0].index(max(result[0]))]
-        ingredients.append(result)
-    return ingredients
+        json_file = open('model.json', 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        self.loaded_model = model_from_json(loaded_model_json)
+        # load weights into new model
+        self.loaded_model.load_weights("model.h5")
+    def predict(self, inputSet):
+
+        ingredients = []
+        for ingredient in inputSet:
+            testSet, word_list = convertToModelInput([ingredient],self.top_x)
+            result = self.loaded_model.predict(sequence.pad_sequences(testSet, maxlen=self.max_length_ingredient))
+            result = result.tolist()
+            if max(result[0]) < 0.01:
+                result = "undefined"
+            else:
+                result = self.allVarieties[result[0].index(max(result[0]))]
+            ingredients.append(result)
+        return ingredients
