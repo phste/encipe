@@ -4,12 +4,18 @@ import json
 def parse(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
-    ingredients = soup.find_all("span",itemprop="recipeIngredient")
+    ingredients = soup.find_all("span", itemprop="recipeIngredient")
     ingredientsDict = {}
     for i in ingredients:
         ingredientsText = i.text
         offset = 0
-        if("/" in ingredientsText.split(" ")[1]  ):
+
+        dataId = int(i["data-id"])
+
+        if dataId == 0:
+            continue
+            
+        if("/" in ingredientsText.split(" ")[1]):
             offset = offset + 1
             quantity = " ".join(ingredientsText.split(" ")[0:2])
         else:
@@ -44,13 +50,13 @@ def classify(ingredients):
         "Chocolate":14.67,
         "Chocolate milk":4.65,
         "Corn":0.19,
-        "Dried Beef2:27.76,
+        "Dried Beef": 27.76,
         "Dry Pasta":1.49,
         "Fresh ravioli with meat":10.25,
         "Fresh ravioli with spinach and ricotta":3.06,
         "Gruyére":8.29,
         "Ham":10.76,
-        "Lentils2:0.78,
+        "Lentils":0.78,
         "Low fat organic milk":1.11,
         "Non-free range eggs":3.94,
         "Pancetta":10.76,
