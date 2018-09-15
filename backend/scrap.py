@@ -31,8 +31,7 @@ def parse(url):
                 quantity = ingredientsText.split(" ")[0]
                 unit = None
                 name = ""
-                possibleUnits = ["cup", "teaspoon", "tablespoon","cups", "teaspoons", "tablespoons", "quart", "quarts", "ounce", "ounces", "slice", "slices"  ]
-                if ingredientsText.split(" ")[1+offset] in possibleUnits:
+            if ingredientsText.split(" ")[1+offset] in scrap.unitConversionTable:
                     unit =  ingredientsText.split(" ")[1+offset]
                     offset = offset + 1
                 name = " ".join(ingredientsText.split(" ")[1+offset:])
@@ -50,6 +49,40 @@ def classify(ingredient, unit, quantity):
     waterFootprint = 0
     energyFootprint = 0
     predictedIngredient = predict_ingredients.predict([ingredient])[0]
+
+    if "/" in quantity:
+        quantitySplit = quantity.split(" ")
+        offset = 0
+        if len(quantitySplit) > 1:
+            offset = 1
+        fracture = quantitySplit[offset].split("/")
+        quantity = float(fracture[0])/float(fracture[1])
+        if offset >0:
+            quantity = quantity + float(quantitySplit[0])
+    else:
+        quantity = float(quantity)
+
+
+    if predictedIngredient in scrap.co2footprintTable:
+        mass = -1;
+        if unit in scrap.unitConversionTable:
+            mass = quantity*scrap.unitConversionTable[unit]
+
+        #calculate footprint
+        if mass > 0:
+            co2Footprint =scrap. co2footprintTable[predictedIngredient]*mass
+        else:
+            co2Footprint = 0.123456789
+    else:
+        co2Footprint = 0.123456789
+
+
+    return dict(
+            co2=co2Footprint,
+            water=waterFootprint,
+            energy=energyFootprint
+    )
+
     unitConversionTable = {"cup": 0.24, #liter
          "cups":0.24,
          "tablespoon": 0.0143, #kilogramm
@@ -61,9 +94,24 @@ def classify(ingredient, unit, quantity):
          "ounce": 0.03, #kilogramm
          "ounces": 0.03,
          "slice": 0.05,
-         "slices": 0.05;
-         "pounds:" 0.5,
+         "slices": 0.05,
+         "gramms": 0.001,
+         "gramm": 0.001,
+         "kilogramm": 1.0,
+         "kilogramms": 1.0,
+         "gramms": 0.001,
+         "gramm": 0.001,
+         "millilitres": 0.001,
+         "milliliters": 0.001,
+         "l": 1.0,
+         "ml": 0.001,
+         "g": 0.001,
+         "kg": 1.0,
+         "pounds": 0.5,
+         "pounds": 0.5,
+         "pounds": 0.5,
          "pound": 0.5}
+
     co2footprintTable = {"Beef":27.76,
         "Cheese slices":8.29,
         "Cheese spread":6.20,
@@ -107,36 +155,3 @@ def classify(ingredient, unit, quantity):
         "Peas":0.6,
         "Barley":0.52,
         "Chickpeas":0.67}
-
-    if "/" in quantity:
-        quantitySplit = quantity.split(" ")
-        offset = 0
-        if len(quantitySplit) > 1:
-            offset = 1
-        fracture = quantitySplit[offset].split("/")
-        quantity = float(fracture[0])/float(fracture[1])
-        if offset >0:
-            quantity = quantity + float(quantitySplit[0])
-    else:
-        quantity = float(quantity)
-
-
-    if predictedIngredient in co2footprintTable:
-        mass = -1;
-        if unit in unitConversionTable:
-            mass = quantity*unitConversionTable[unit]
-
-        #calculate footprint
-        if mass > 0:
-            co2Footprint = co2footprintTable[predictedIngredient]*mass
-        else:
-            co2Footprint = 0.123456789
-    else:
-        co2Footprint = 0.123456789
-
-
-    return dict(
-            co2=co2Footprint,
-            water=waterFootprint,
-            energy=energyFootprint
-    )
