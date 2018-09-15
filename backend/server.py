@@ -1,9 +1,13 @@
 from sanic import Sanic
 from sanic.response import json
+from sanic_cors import CORS, cross_origin
 
 from scrap import parse
 
+
+
 app = Sanic()
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.post('/api/recipe')
 def parse_recipe(request):

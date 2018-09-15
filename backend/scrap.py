@@ -4,8 +4,9 @@ import json
 def parse(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
+    recipe = dict()
     ingredients = soup.find_all("span", itemprop="recipeIngredient")
-    ingredientsDict = {}
+    ingredientsArray = []
     for i in ingredients:
         ingredientsText = i.text
         offset = 0
@@ -27,9 +28,17 @@ def parse(url):
             unit =  ingredientsText.split(" ")[1+offset]
             offset = offset + 1
         name = " ".join(ingredientsText.split(" ")[1+offset:])
-        ingredientsDict[name] = {"unit":unit, "quantity":quantity}
-    jsonDump = json.loads(json.dumps(ingredientsDict))
-    return jsonDump
+        costs = dict(
+                co2=10,
+                water=0,
+                energy=0
+        )
+        ingredientsArray.append({"name": name, "unit":unit, "quantity":quantity, "costs": costs})
+    
+    recipe["ingredients"] = ingredientsArray
+    recipe["title"] = soup.select("#recipe-main-content")[0].text
+
+    return recipe
 
 def classify(ingredients):
 

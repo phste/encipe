@@ -1,1 +1,50 @@
 @import "../../node_modules/uikit/src/less/uikit.theme.less";
+
+html {
+    background-color: #455d7a;
+}
+
+.encipe {
+    perspective: 400px;
+}
+
+.searchbar, .ingredients {
+    background-color: #fff;
+    padding: 0 2rem;
+}
+
+.searchbar {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.ingredients {
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+    transform-origin: 50% 0%;
+    transform: rotate3d(1, 0, 0, -116deg);
+    display: none;
+    transition: transform 0.5s;
+}
+
+.ingredients.show {
+    display: block;
+    animation: flipdown 0.5s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.ingredients-list {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #455d7a;
+    margin-bottom: 2rem;
+}
+
+@keyframes flipdown {
+    0%  {
+        transform: rotate3d(1, 0, 0, -116deg);
+    }
+
+    100% {
+        transform: rotate3d(1, 0, 0, 0deg);
+    }
+}
