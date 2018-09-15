@@ -17,11 +17,15 @@ export class Recipe {
     }
 
     get totalCosts() {
-        return this.recipe.ingredients.reduce(function(acc, ingredient) {
-            acc["co2"] += ingredient["costs"]["co2"]
-            acc["water"] += ingredient["costs"]["water"]
-            acc["energy"] += ingredient["costs"]["energy"]
-        }, {"co2": 0, "water": 0, "energy": 0})
+        return this.recipe.ingredients.reduce(
+            function(acc, ingredient) {
+                return {
+                    "co2": acc.co2 + ingredient.costs.co2,
+                    "water": acc.water + ingredient.costs.water,
+                    "energy": acc.energy + ingredient.costs.energy
+                }
+            }, {"co2": 0, "water": 0, "energy": 0}
+        )
     }
 }
 

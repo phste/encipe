@@ -24,6 +24,9 @@ export default class SearchBar extends React.Component {
   }
 
   render() {
-    return <div className="searchbar"><input className="uk-input" type="text" value={this.state.url} onChange={this.handleChange} placeholder="Paste in the recipe url..."/></div>;
+    return <div className="searchbar">
+            <h2>encipe <span>check the environmental impact of a recipe</span></h2>
+            <input className="uk-input" type="text" value={this.state.url} onChange={this.handleChange} placeholder="Paste in the recipe url..."/>
+          </div>;
   }
 }

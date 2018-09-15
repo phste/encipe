@@ -28,16 +28,14 @@ const IngredientsList = observer(class IngredientsList extends React.Component {
             classes += ' show'
         }
 
-        console.log(this.props.stores.recipe);
-
         return <div className={classes}>
             <h3>Environmental Bill for {this.props.stores.recipe.recipe.title}</h3>
-            <div class="ingredients-list">
+            <div className="ingredients-list">
                 {this.createItems()}
             </div>
-            <div class="uk-grid-small" uk-grid="true">
-                <div class="uk-width-expand" uk-leader="fill:  "></div>
-                <div>{this.props.stores.recipe.recipe.totalCosts["co2"]} kg CO<sub>2</sub></div>
+            <div className="uk-grid-small" uk-grid="true">
+                <div className="uk-width-expand" uk-leader="fill:  "></div>
+                <div> {this.props.stores.recipe.totalCosts.co2} kg CO<sub>2</sub></div>
             </div>
         </div>;
     }
