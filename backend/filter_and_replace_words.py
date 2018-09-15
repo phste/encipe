@@ -13,13 +13,15 @@ def count_top_x_words(corpus, top_x, skip_top_n):
 
 def replace_top_x_words_with_vectors(corpus, top_x):
     topx_dict = {top_x[i]: i for i in range(len(top_x))}
+    return convertToModelInput(corpus, topx_dict)
 
+
+def convertToModelInput(corpus, topx_dict):
     return [
         [topx_dict[w] for w in word_tokenize(s) if w in topx_dict]
         for s in corpus
     ], topx_dict
 
-
 def filter_to_top_x(corpus, n_top, skip_n_top=0):
     top_x = count_top_x_words(corpus, n_top, skip_n_top)
-return replace_top_x_words_with_vectors(corpus, top_x)
+    return replace_top_x_words_with_vectors(corpus, top_x)
