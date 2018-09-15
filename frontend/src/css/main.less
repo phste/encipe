@@ -51,6 +51,8 @@ html {
 
     .clouds {
         opacity: 0;
+        position: relative;
+        top: -50%;
 
         img {
             width: 16rem;
@@ -72,7 +74,7 @@ html {
 
     .car {
         position: relative;
-        top: -42%;
+        top: -92%;
         left: 0;
         transition: transform 0.5s ease-in-out;
     }
@@ -85,6 +87,26 @@ html {
         .clouds {
             opacity: 1;
         }
+    }
+}
+
+.water {
+    height: 10rem;
+
+    img {
+        position: relative;
+        left: -4%;
+        top: -40%;
+        height: 10rem;
+        display: block;
+    }
+
+    span {
+        position: relative;
+        left: 25%;
+        top: 34%;
+        display: block;
+        font-size: 1.5rem;
     }
 }
 

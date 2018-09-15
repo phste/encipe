@@ -29,15 +29,22 @@ const Visualization = observer(class Visualization extends React.Component {
 
         return <div>
             <h3>Imagine...</h3>
-            <p>cooking this food is equal to the use or production of</p>
+            <p>cooking this meal is equal to</p>
             <div className={this.state.classes}>
                 <div className="clouds">
-                    <span>{this.props.stores.recipe.drivableCarKm.toFixed(2)} km</span>
+                    <span>driving <br/>{this.props.stores.recipe.drivableCarKm.toFixed(2)} km</span>
                     <img src="http://localhost:8000/cloud.svg"/>
                 </div>
                 <div className="car">
                     <img src="http://localhost:8000/car.svg"/>
                 </div>
+            </div>
+            <div className="water">
+                <span>
+                    trink <b>2.5l</b> for <br/> <b>{this.props.stores.recipe.trinkingDays.toFixed(0)} days 
+                    ({(this.props.stores.recipe.trinkingDays / 356).toFixed(2)} years)</b>
+                </span>
+                <img src="http://localhost:8000/water.svg"/>
             </div>
         </div>;
     }

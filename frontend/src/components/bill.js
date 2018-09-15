@@ -60,8 +60,8 @@ const IngredientsList = observer(class IngredientsList extends React.Component {
             energy: {
                 name: "Energy",
                 key: "energy",
-                unit: "MJ",
-                multiplier: 1
+                unit: "kWh",
+                multiplier: 0.277778
             }
         }
 
@@ -90,7 +90,7 @@ const IngredientsList = observer(class IngredientsList extends React.Component {
                         {this.createItems()}
                     </div>
                     <div className="uk-grid-small" uk-grid="true">
-                        <div className="uk-width-expand" uk-leader="fill:  "></div>
+                        <div className="uk-width-expand" uk-leader="fill:  ">Total</div>
                         <div><b>{(this.props.stores.recipe.totalCosts[this.types[this.state.type].key] * this.types[this.state.type].multiplier).toFixed(2)} {this.types[this.state.type].unit}</b></div>
                     </div>
                 </div>;
