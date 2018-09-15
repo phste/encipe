@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import json
+import predict_ingredients
 def parse(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -16,34 +17,39 @@ def parse(url):
         if dataId == 0:
             continue
         if("(" in ingredientsText.split(" ")[1]):
-            offset = offset + 1
+
+            quantity = ingredientsText.split(" ")[1][1:]
+            unit = ingredientsText.split(" ")[2][:-1]
+            name
             #todo
-        elif("/" in ingredientsText.split(" ")[1]):
-            offset = offset + 1
-            quantity = " ".join(ingredientsText.split(" ")[0:2])
         else:
-            quantity = ingredientsText.split(" ")[0]
-        unit = None
-        name = ""
-        possibleUnits = ["cup", "teaspoon", "tablespoon","cups", "teaspoons", "tablespoons", "quart", "quarts", "ounce", "ounces", "slice", "slices"  ]
-        if ingredientsText.split(" ")[1+offset] in possibleUnits:
-            unit =  ingredientsText.split(" ")[1+offset]
-            offset = offset + 1
-        name = " ".join(ingredientsText.split(" ")[1+offset:])
-        costs = dict(
-                co2=10,
-                water=0,
-                energy=0
-        )
+            if("/" in ingredientsText.split(" ")[1]):
+                offset = offset + 1
+                quantity = " ".join(ingredientsText.split(" ")[0:2])
+                name = " ".join(ingredientsText.split(" ")[3:])
+            else:
+                quantity = ingredientsText.split(" ")[0]
+                unit = None
+                name = ""
+                possibleUnits = ["cup", "teaspoon", "tablespoon","cups", "teaspoons", "tablespoons", "quart", "quarts", "ounce", "ounces", "slice", "slices"  ]
+                if ingredientsText.split(" ")[1+offset] in possibleUnits:
+                    unit =  ingredientsText.split(" ")[1+offset]
+                    offset = offset + 1
+                name = " ".join(ingredientsText.split(" ")[1+offset:])
+        costs = classify(name, unit, quantity)
         ingredientsArray.append({"name": name, "unit":unit, "quantity":quantity, "costs": costs})
-    
+
     recipe["ingredients"] = ingredientsArray
     recipe["title"] = soup.select("#recipe-main-content")[0].text
 
     return recipe
 
-def classify(ingredients):
-
+def classify(ingredient, unit, quantity):
+    ingredient = ingredient.lower()
+    co2Footprint = 10
+    waterFootprint = 0
+    energyFootprint = 0
+    predictedIngredient = predict_ingredients.predict([ingredient])[0]
     unitConversionTable = {"cup": 0.24, #liter
          "cups":0.24,
          "tablespoon": 0.0143, #kilogramm
@@ -53,10 +59,10 @@ def classify(ingredients):
          "quart": 1.0, #liter
          "quarts": 1.0,
          "ounce": 0.03, #kilogramm
-         "ounces": 0.03;
+         "ounces": 0.03,
          "slice": 0.05,
          "slices": 0.05}
-    co2footprintTable : {"Beef":27.76,
+    co2footprintTable = {"Beef":27.76,
         "Cheese slices":8.29,
         "Cheese spread":6.20,
         "Chicken":6.82,
@@ -100,32 +106,35 @@ def classify(ingredients):
         "Barley":0.52,
         "Chickpeas":0.67}
 
-    jsonIngredients = json.loads(json.dumps(ingredients))
-    co2footprint = 0
-    ingredientsCO2Footprint = {}
-    for ingredient in jsonIngredients:
-        ingredientCO2Footprint = 0
-
-        quantity = jsonIngredients[ingredient]["quantity"]
-        unit = jsonIngredients[ingredient]["unit"]
-        if "/" in quantity:
-            quantitySplit = quantity.split(" ")
-            offset = 0
-            if len(quantitySplit) > 1:
-                offset = 1
-            fracture = quantitySplit[offset].split("/")
-            quantity = float(fracture[0])/float(fracture[1])
-            if offset >0:
-                quantity = quantity + float(quantitySplit[0])
-        else:
-            quantity = float(quantity)
+    if "/" in quantity:
+        quantitySplit = quantity.split(" ")
+        offset = 0
+        if len(quantitySplit) > 1:
+            offset = 1
+        fracture = quantitySplit[offset].split("/")
+        quantity = float(fracture[0])/float(fracture[1])
+        if offset >0:
+            quantity = quantity + float(quantitySplit[0])
+    else:
+        quantity = float(quantity)
 
 
+    if predictedIngredient in co2footprintTable:
         mass = -1;
-
         if unit in unitConversionTable:
             mass = quantity*unitConversionTable[unit]
-        #calculate footprint
-        ingredientsCO2Footprint[ingredient] = CO2Footprint
 
-    return json.dumps(ingredientsCO2Footprint)
+        #calculate footprint
+        if mass > 0:
+            co2Footprint = co2footprintTable[predictedIngredient]*mass
+        else:
+            co2Footprint = 0.123456789
+    else:
+        co2Footprint = 0.123456789
+
+
+    return dict(
+            co2=co2Footprint,
+            water=waterFootprint,
+            energy=energyFootprint
+    )
