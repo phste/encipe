@@ -20,7 +20,7 @@ def parse(url):
 
             quantity = ingredientsText.split(" ")[1][1:]
             unit = ingredientsText.split(" ")[2][:-1]
-            name
+            name = " ".join(ingredientsText.split(" ")[4:])
             #todo
         else:
             if("/" in ingredientsText.split(" ")[1]):
@@ -61,7 +61,9 @@ def classify(ingredient, unit, quantity):
          "ounce": 0.03, #kilogramm
          "ounces": 0.03,
          "slice": 0.05,
-         "slices": 0.05}
+         "slices": 0.05;
+         "pounds:" 0.5,
+         "pound": 0.5}
     co2footprintTable = {"Beef":27.76,
         "Cheese slices":8.29,
         "Cheese spread":6.20,
