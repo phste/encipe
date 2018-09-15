@@ -14,15 +14,17 @@ def parse(url):
 
         if dataId == 0:
             continue
-
-        if("/" in ingredientsText.split(" ")[1]):
+        if("(" in ingredientsText.split(" ")[1]):
+            offset = offset + 1
+            #todo
+        elif("/" in ingredientsText.split(" ")[1]):
             offset = offset + 1
             quantity = " ".join(ingredientsText.split(" ")[0:2])
         else:
             quantity = ingredientsText.split(" ")[0]
         unit = None
         name = ""
-        possibleUnits = ["cup", "teaspoon", "tablespoon","cups", "teaspoons", "tablespoons", "quart", "quarts", "ounce", "ounces"  ]
+        possibleUnits = ["cup", "teaspoon", "tablespoon","cups", "teaspoons", "tablespoons", "quart", "quarts", "ounce", "ounces", "slice", "slices"  ]
         if ingredientsText.split(" ")[1+offset] in possibleUnits:
             unit =  ingredientsText.split(" ")[1+offset]
             offset = offset + 1
@@ -42,7 +44,9 @@ def classify(ingredients):
          "quart": 1.0, #liter
          "quarts": 1.0,
          "ounce": 0.03, #kilogramm
-         "ounces": 0.03}
+         "ounces": 0.03;
+         "slice": 0.05,
+         "slices": 0.05}
     co2footprintTable : {"Beef":27.76,
         "Cheese slices":8.29,
         "Cheese spread":6.20,
