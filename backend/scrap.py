@@ -14,7 +14,7 @@ def parse(url):
 
         if dataId == 0:
             continue
-            
+
         if("/" in ingredientsText.split(" ")[1]):
             offset = offset + 1
             quantity = " ".join(ingredientsText.split(" ")[0:2])
@@ -89,6 +89,7 @@ def classify(ingredients):
 
     jsonIngredients = json.loads(json.dumps(ingredients))
     co2footprint = 0
+    ingredientsCO2Footprint = {}
     for ingredient in jsonIngredients:
         ingredientCO2Footprint = 0
 
@@ -112,6 +113,6 @@ def classify(ingredients):
         if unit in unitConversionTable:
             mass = quantity*unitConversionTable[unit]
         #calculate footprint
-        co2footprint = co2footprint + ingredientCO2Footprint
-    print(co2footprint)
-    return co2footprint
+        ingredientsCO2Footprint[ingredient] = CO2Footprint
+
+    return json.dumps(ingredientsCO2Footprint)
