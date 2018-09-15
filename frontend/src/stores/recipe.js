@@ -37,8 +37,8 @@ export class Recipe {
     }
 
     get drivableCarKm() {
-        let lphk = 9 // Liters per 100km
-        let kgco2 = 3.09 // 2.5 for petrol driven car https://www.co2online.de/klima-schuetzen/mobilitaet/auto-co2-ausstoss/
+        let lphk = 7 // Liters per 100km
+        let kgco2 = 2.5 // 2.5 for petrol driven car https://www.co2online.de/klima-schuetzen/mobilitaet/auto-co2-ausstoss/
         let co2cost = this.totalCosts["co2"]
 
         return (co2cost / kgco2) / lphk * 100;
@@ -50,11 +50,19 @@ export class Recipe {
 
         return (water_cost / liters_per_day);
     }
+
+    get houseElectricDays() {
+        let mjperday = 13500 / 356;
+        let energy_cost = this.totalCosts["energy"]
+
+        return energy_cost / mjperday;
+    }
 }
 
 decorate(Recipe, {
     recipe: observable,
     totalCosts: computed,
     drivableCarKm: computed,
-    trinkingDays: computed
+    trinkingDays: computed,
+    houseElectricDays: computed
 })

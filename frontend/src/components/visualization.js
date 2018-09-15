@@ -41,10 +41,16 @@ const Visualization = observer(class Visualization extends React.Component {
             </div>
             <div className="water">
                 <span>
-                    trink <b>2.5l</b> for <br/> <b>{this.props.stores.recipe.trinkingDays.toFixed(0)} days 
+                    drink <b>2.5l</b> for <br/> <b>{this.props.stores.recipe.trinkingDays.toFixed(0)} days 
                     ({(this.props.stores.recipe.trinkingDays / 356).toFixed(2)} years)</b>
                 </span>
                 <img src="http://localhost:8000/water.svg"/>
+            </div>
+            <div className="energy">
+                <span>
+                    or power a <br/><b>family home</b> for <br/><b>{this.props.stores.recipe.houseElectricDays.toFixed(0)} days</b>
+                </span>
+                <img src="http://localhost:8000/house.svg"/>
             </div>
         </div>;
     }
