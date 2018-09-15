@@ -20,6 +20,8 @@ export default class SearchBar extends React.Component {
 
     if(pattern.test(event.target.value)) {
       this.props.stores.api.getRecipe(event.target.value)
+    } else {
+      this.props.stores.recipe.recipeCleared()
     }
   }
 

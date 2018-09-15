@@ -5,6 +5,7 @@ export class Recipe {
     constructor(root) {
         this.rootStore = root
         this.rootStore.api.subscribe("recipe_loaded", this.recipeLoaded.bind(this))
+        this.rootStore.api.subscribe("recipe_cleared", this.recipeCleared.bind(this))
 
         this.recipe = {
             title: "",
@@ -14,6 +15,13 @@ export class Recipe {
 
     recipeLoaded(recipe) {
         this.recipe = recipe
+    }
+
+    recipeCleared() {
+        this.recipe = {
+            title: "",
+            ingredients: [],
+        }
     }
 
     get totalCosts() {

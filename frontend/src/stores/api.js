@@ -5,17 +5,23 @@ export class Api {
     
     constructor() {
         this.events = {
-            "recipe_loaded": []
+            "recipe_loaded": [],
+            "recipe_cleared": []
         }
     }
 
-    receivedRecipe(data) {
-        this.events["recipe_loaded"].forEach(function(cb) {
+    fireEvent(event, data) {
+        this.events[event].forEach(function(cb) {
             cb(data)
         })
     }
 
+    receivedRecipe(data) {
+       this.fireEvent("recipe_loaded", data)
+    }
+
     getRecipe(url) {
+        this.fireEvent("recipe_cleared", null)
         var formData = new FormData()
         formData.append('url', url)
         fetch(config.apiServer + "recipe", {

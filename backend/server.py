@@ -13,7 +13,7 @@ parser = Parser()
 @app.post('/api/recipe')
 def parse_recipe(request):
     url = request.form['url'][0]
-    recipe = Parser.parse(url)
+    recipe = parser.parse(url)
 
     return json(recipe)
 
