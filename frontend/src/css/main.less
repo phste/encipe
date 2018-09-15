@@ -31,6 +31,7 @@ html {
     transform: rotate3d(1, 0, 0, -116deg);
     display: none;
     transition: transform 0.5s;
+    margin-top: -0.2rem;
 }
 
 .ingredients.show {
@@ -43,6 +44,48 @@ html {
     padding-bottom: 2rem;
     border-bottom: 1px solid #455d7a;
     margin-bottom: 2rem;
+}
+
+.co2 {
+    height: 10rem;
+
+    .clouds {
+        opacity: 0;
+
+        img {
+            width: 16rem;
+        }
+
+        span {
+            position: relative;
+            top: 7rem;
+            width: 12rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            display: block;
+        }
+        transition: opacity 0.5s ease-in-out;
+        transition-delay: 0.5s;
+    }
+
+    .car {
+        position: relative;
+        top: -42%;
+        left: 0;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    &.show {
+        .car {
+            transform: translateX(50%);
+        }
+
+        .clouds {
+            opacity: 1;
+        }
+    }
 }
 
 @keyframes flipdown {

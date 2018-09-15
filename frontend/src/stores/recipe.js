@@ -27,6 +27,14 @@ export class Recipe {
             }, {"co2": 0, "water": 0, "energy": 0}
         )
     }
+
+    get drivableCarKm() {
+        let lphk = 6 // Liters per 100km
+        let kgco2 = 2.5 // 2.5 for petrol driven car https://www.co2online.de/klima-schuetzen/mobilitaet/auto-co2-ausstoss/
+        let co2cost = this.totalCosts["co2"]
+
+        return (co2cost / kgco2) / lphk * 100;
+    }
 }
 
 decorate(Recipe, {

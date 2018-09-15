@@ -30,7 +30,7 @@ const IngredientsList = observer(class IngredientsList extends React.Component {
                     </div>
                     <div className="uk-grid-small" uk-grid="true">
                         <div className="uk-width-expand" uk-leader="fill:  "></div>
-                        <div> {this.props.stores.recipe.totalCosts.co2.toFixed(2)} kg CO<sub>2</sub></div>
+                        <div><b>{this.props.stores.recipe.totalCosts.co2.toFixed(2)} kg CO<sub>2</sub></b></div>
                     </div>
                 </div>;
     }
